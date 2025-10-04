@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sales History - Shopkeeper</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f8f9fb;
+      margin: 0;
+      padding: 0;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 30px;
+      background: white;
+      border-bottom: 1px solid #ddd;
+    }
+
+    .logo {
+      font-size: 1.6rem;
+      font-weight: bold;
+    }
+
+    .logo span {
+      color: #1e9b5a;
+    }
+
+    .logout-btn {
+      background: white;
+      border: 1px solid #ddd;
+      padding: 8px 14px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    .nav-tabs {
+      display: flex;
+      justify-content: center;
+      background: #f8f9fb;
+      padding: 12px 0;
+      gap: 10px;
+    }
+
+    .nav-tab {
+      padding: 10px 20px;
+      background: #ececec;
+      border-radius: 20px;
+      cursor: pointer;
+      transition: background 0.2s ease-in-out;
+    }
+
+    .nav-tab:hover {
+      background: #ddd;
+    }
+
+    .nav-tab.active {
+      background: white;
+      border: 1px solid #ccc;
+      font-weight: bold;
+    }
+
+    .sales-container {
+      background: white;
+      border-radius: 10px;
+      padding: 20px;
+      margin: 20px auto;
+      max-width: 800px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+
+    .sale-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 0;
+      border-bottom: 1px solid #eee;
+    }
+
+    .sale-item:last-child {
+      border-bottom: none;
+    }
+
+    .item-name {
+      font-weight: bold;
+    }
+
+    .item-date {
+      font-size: 12px;
+      color: gray;
+    }
+
+    .item-qty {
+      color: black;
+      font-weight: 500;
+      margin-right: 15px;
+    }
+
+    .item-price {
+      color: green;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header>
+    <div class="logo"><span>Swift</span>Mart</div>
+    <button class="logout-btn" onclick="window.location.href='http://localhost:8080/'">Logout</button>
+  </header>
+
+  <!-- Navigation Tabs -->
+  <div class="nav-tabs">
+    <div class="nav-tab" onclick="window.location.href='shopkeeper-dashboard.html'">Dashboard</div>
+    <div class="nav-tab" onclick="window.location.href='shopkeeper-inventory.html'">Inventory</div>
+    <div class="nav-tab active" onclick="window.location.href='shopkeeper-sales-history.html'">Sales History</div>
+    <div class="nav-tab" onclick="window.location.href='shopkeeper-vendor-request.html'">Vendor Requests</div>
+  </div>
+
+  <!-- Sales History Section -->
+  <div class="sales-container">
+    <h3>Sales History</h3>
+    <div class="sale-item">
+      <div>
+        <div class="item-name">Fresh Bananas</div>
+        <div class="item-date">9/15/2025, 10:30:00 AM</div>
+      </div>
+      <div>
+        <span class="item-qty">5 units</span>
+        <span class="item-price">₹200</span>
+      </div>
+    </div>
+    <div class="sale-item">
+      <div>
+        <div class="item-name">White Bread</div>
+        <div class="item-date">9/15/2025, 11:15:00 AM</div>
+      </div>
+      <div>
+        <span class="item-qty">2 units</span>
+        <span class="item-price">₹70</span>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>

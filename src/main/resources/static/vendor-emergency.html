@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vendor Emergency Requests - SwiftMart</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      background-color: #f8f9fb;
+      color: #333;
+    }
+
+    /* Header */
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 30px;
+      background: #fff;
+      border-bottom: 1px solid #ddd;
+    }
+
+    .logo {
+      font-size: 1.6rem;
+      font-weight: bold;
+      color: #1e9b5a;
+    }
+
+    .logout-btn {
+      background: #fff;
+      border: 1px solid #ddd;
+      padding: 8px 14px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    /* Tabs */
+    .tabs {
+      display: flex;
+      justify-content: start;
+      margin: 20px 30px 0 30px;
+      background: #eaeaea;
+      border-radius: 20px;
+      overflow: hidden;
+    }
+
+    .tab {
+      flex: 1;
+      padding: 10px 0;
+      text-align: center;
+      cursor: pointer;
+      font-weight: bold;
+      transition: background 0.2s;
+    }
+
+    .tab.active {
+      background: #fff;
+    }
+
+    /* Emergency Requests Section */
+    .emergency-requests {
+      margin: 20px 30px;
+      background: #fff;
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+
+    .emergency-requests h3 {
+      margin: 0 0 15px 0;
+      color: #d33;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .request-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 0;
+      border-bottom: 1px solid #eee;
+      background: #fff5f5;
+      border-radius: 8px;
+      margin-bottom: 12px;
+      padding: 15px;
+    }
+
+    .request-info {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .request-name {
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .urgent-label {
+      background: #d33;
+      color: #fff;
+      padding: 2px 6px;
+      font-size: 12px;
+      border-radius: 4px;
+    }
+
+    .request-meta {
+      font-size: 12px;
+      color: gray;
+    }
+
+    .request-status {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 6px;
+    }
+
+    .request-units {
+      font-weight: bold;
+      color: #d33;
+    }
+
+    .btn-fulfill {
+      background: #1e9b5a;
+      color: #fff;
+      border: none;
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 13px;
+      cursor: pointer;
+    }
+
+    .btn-cancel {
+      background: #fff;
+      border: 1px solid #ccc;
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 13px;
+      cursor: pointer;
+    }
+
+    .btn-fulfill:hover {
+      background: #178f50;
+    }
+
+    .btn-cancel:hover {
+      background: #f5f5f5;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header>
+    <div class="logo">SwiftMart Vendor</div>
+    <button class="logout-btn" onclick="window.location.href='http://localhost:8080/'">Logout</button>
+  </header>
+
+  <!-- Tabs -->
+  <div class="tabs">
+    <div class="tab" onclick="window.location.href='/vendor/dashboard'">Dashboard</div>
+    <div class="tab" onclick="window.location.href='/vendor/requests'">All Requests</div>
+    <div class="tab active" onclick="switchTab(this)">Emergency</div>
+    <div class="tab" onclick="window.location.href='/vendor/shop'">Shops</div>
+  </div>
+
+  <!-- Emergency Requests -->
+  <div class="emergency-requests">
+    <h3>⚠️ Emergency Requests</h3>
+
+    <div class="request-item">
+      <div class="request-info">
+        <div class="request-name">Potato Chips <span class="urgent-label">URGENT</span></div>
+        <div class="request-meta">Raj Kumar (SHOP001) • 2d ago</div>
+      </div>
+      <div class="request-status">
+        <div class="request-units">50 units</div>
+        <button class="btn-fulfill">Fulfill Now</button>
+        <button class="btn-cancel">Cancel</button>
+      </div>
+    </div>
+
+    <div class="request-item">
+      <div class="request-info">
+        <div class="request-name">White Bread <span class="urgent-label">URGENT</span></div>
+        <div class="request-meta">Amit Patel (SHOP003) • 2d ago</div>
+      </div>
+      <div class="request-status">
+        <div class="request-units">25 units</div>
+        <button class="btn-fulfill">Fulfill Now</button>
+        <button class="btn-cancel">Cancel</button>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    // Simple tab switch highlight
+    function switchTab(el) {
+      document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+      el.classList.add('active');
+    }
+  </script>
+
+</body>
+</html>

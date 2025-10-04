@@ -1,0 +1,911 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SwiftMart - Inventory</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f8f9fb;
+      margin: 0;
+      padding: 0;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 30px;
+      background: white;
+      border-bottom: 1px solid #ddd;
+    }
+
+    .logo {
+      font-size: 1.6rem;
+      font-weight: bold;
+    }
+
+    .logo span {
+      color: #1e9b5a;
+    }
+
+    .logout-btn {
+      background: white;
+      border: 1px solid #ddd;
+      padding: 8px 14px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    .logout-btn:hover {
+      background: #f8f9fb;
+    }
+
+    .nav-tabs {
+      display: flex;
+      justify-content: center;
+      background: #f8f9fb;
+      padding: 12px 0;
+      gap: 10px;
+    }
+
+    .nav-tab {
+      padding: 10px 20px;
+      background: #ececec;
+      border-radius: 20px;
+      cursor: pointer;
+      transition: background 0.2s ease-in-out;
+    }
+
+    .nav-tab:hover {
+      background: #ddd;
+    }
+
+    .nav-tab.active {
+      background: white;
+      border: 1px solid #ccc;
+      font-weight: bold;
+    }
+
+    .filter-bar {
+      padding: 20px 30px;
+      display: flex;
+      gap: 1rem;
+      background: white;
+      margin: 20px auto;
+      border-radius: 10px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      max-width: 1100px;
+    }
+
+    .search-box {
+      flex: 1;
+      padding: 10px 15px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      font-size: 14px;
+    }
+
+    .category-filter {
+      padding: 10px 15px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      font-size: 14px;
+    }
+
+    .inventory-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 20px;
+      padding: 20px;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .item-card {
+      background: white;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      transition: transform 0.2s;
+    }
+
+    .item-card:hover {
+      transform: translateY(-2px);
+    }
+
+    .item-card img {
+      width: 100%;
+      height: 160px;
+      object-fit: cover;
+    }
+
+    .item-info {
+      padding: 15px;
+    }
+
+    .item-name {
+      font-weight: bold;
+      margin-bottom: 5px;
+      font-size: 1rem;
+    }
+
+    .price {
+      color: #1e9b5a;
+      font-weight: bold;
+      font-size: 1.1rem;
+    }
+
+    .stock {
+      color: #6c757d;
+      font-size: 0.9rem;
+      margin-top: 5px;
+    }
+
+    .status {
+      display: inline-block;
+      margin-top: 10px;
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-size: 0.75rem;
+      font-weight: bold;
+    }
+
+    .status.in-stock {
+      background: #d4edda;
+      color: #155724;
+    }
+
+    .status.low-stock {
+      background: #fff3cd;
+      color: #856404;
+    }
+
+    .status.out-stock {
+      background: #f8d7da;
+      color: #721c24;
+    }
+
+    /* New styles for request inputs */
+    #products-table {
+      width: 95%;
+      margin: 20px auto;
+      border-collapse: collapse;
+      background: white;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      border-radius: 10px;
+      overflow: hidden;
+      max-width: 1100px;
+    }
+
+    #products-table th {
+      background: #1e9b5a;
+      color: white;
+      padding: 15px;
+      text-align: left;
+      font-weight: bold;
+    }
+
+    #products-table td {
+      padding: 12px 15px;
+      border-bottom: 1px solid #f0f0f0;
+    }
+
+    .category-select {
+      padding: 8px 12px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      width: 100%;
+      font-size: 14px;
+    }
+
+    .price-input {
+      padding: 8px 12px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      width: 100px;
+      font-size: 14px;
+    }
+
+    .description-input {
+      padding: 8px 12px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      width: 100%;
+      font-size: 14px;
+    }
+
+    .row-qty-input {
+      padding: 0.25rem;
+      border: 1px solid #d1d3e2;
+      border-radius: 4px;
+      width: 60px;
+    }
+
+    .row-add-btn {
+      background: #1cc88a;
+      color: white;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-left: 0.5rem;
+    }
+
+    .row-add-btn:hover {
+      background: #17a673;
+    }
+
+    .input-error {
+      border-color: #e74a3b !important;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Header -->
+  <header>
+    <div class="logo"><span>Swift</span>Mart</div>
+    <button class="logout-btn" onclick="window.location.href='http://localhost:8080/'">Logout</button>
+  </header>
+
+  <!-- Navigation Tabs -->
+  <div class="nav-tabs">
+    <div class="nav-tab" onclick="window.location.href='shopkeeper-dashboard.html'">Dashboard</div>
+    <div class="nav-tab active" onclick="window.location.href='shopkeeper-inventory.html'">Inventory</div>
+    <div class="nav-tab" onclick="window.location.href='shopkeeper-sales-history.html'">Sales History</div>
+    <div class="nav-tab" onclick="window.location.href='shopkeeper-vendor-request.html'">Vendor Requests</div>
+  </div>
+
+  <!-- Search & Filter -->
+  <div class="filter-bar">
+    <input type="text" placeholder="Search items..." class="search-box" id="searchBox">
+    <select class="category-filter" id="categoryFilter">
+      <option value="">All Categories</option>
+      <option value="Fruits">Fruits</option>
+      <option value="Dairy">Dairy</option>
+      <option value="Snacks">Snacks</option>
+      <option value="Bakery">Bakery</option>
+      <option value="Vegetables">Vegetables</option>
+      <option value="Beverages">Beverages</option>
+      <option value="Household">Household</option>
+    </select>
+  </div>
+
+  <!-- Shopkeeper Info (hidden) -->
+  <div style="display: none;">
+    <input type="hidden" id="shopkeeperName" value="">
+    <input type="hidden" id="shopkeeperEmail" value="">
+  </div>
+
+  <!-- Inventory Items -->
+  <div class="inventory-grid">
+    <div class="item-card">
+      <img src="/bananas.jpg" alt="Bananas" referrerpolicy="no-referrer">
+
+      <div class="item-info">
+        <div class="item-name">Fresh Bananas</div>
+        <div class="price">₹40</div>
+        <div class="stock">Stock: 50</div>
+        <span class="status in-stock">In Stock</span>
+      </div>
+    </div>
+
+    <div class="item-card">
+      <img src="/milk.jpg" alt="Milk" referrerpolicy="no-referrer">
+      <div class="item-info">
+        <div class="item-name">Whole Milk</div>
+        <div class="price">₹60</div>
+        <div class="stock">Stock: 2</div>
+        <span class="status low-stock">Low Stock</span>
+      </div>
+    </div>
+
+    <div class="item-card">
+      <img src="/potatochips.jpg" alt="Chips" referrerpolicy="no-referrer">
+      <div class="item-info">
+        <div class="item-name">Potato Chips</div>
+        <div class="price">₹20</div>
+        <div class="stock">Stock: 0</div>
+        <span class="status out-stock">Out of Stock</span>
+      </div>
+    </div>
+
+    <div class="item-card">
+      <img src="/bread.jpg" alt="Bread" referrerpolicy="no-referrer">
+      <div class="item-info">
+        <div class="item-name">White Bread</div>
+        <div class="price">₹35</div>
+        <div class="stock">Stock: 15</div>
+        <span class="status in-stock">In Stock</span>
+      </div>
+    </div>
+  </div>
+
+  <table id="products-table" border="1">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Qty</th>
+        <th style="text-align:right;">Action</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+
+  <script>
+    // Check authentication
+    if (!localStorage.getItem('jwtToken')) {
+        window.location.href = '/login.html';
+    }
+
+    const API = 'http://localhost:8080/api/products';
+    let allProducts = [];
+    const table = document.getElementById('products-table');
+    table.style.display = 'none';
+
+    async function fetchProducts() {
+      if (allProducts.length) return allProducts;
+      const res = await fetch(API, {
+        headers: {
+            'Authorization': 'Bearer ' + localStorage.getItem('jwtToken')
+        }
+    });
+    products = await res.json();
+      return allProducts;
+    }
+
+    // Generate product-appropriate images based on product name
+    function getWebImageUrl(name) {
+      const productName = (name || 'Item').toLowerCase().trim();
+
+      // Product category mapping with appropriate image keywords
+      const productCategories = {
+        'Rice': ['rice', 'grain', 'food', 'agriculture'],
+        'Wheat': ['wheat', 'grain', 'flour', 'agriculture'],
+        'Flour': ['flour', 'wheat', 'grain', 'baking'],
+        'Oil': ['cooking oil', 'vegetable oil', 'bottle', 'kitchen'],
+        'Sugar': ['sugar', 'sweet', 'crystals', 'white'],
+        'Salt': ['salt', 'crystals', 'white', 'seasoning'],
+        'Tea': ['tea', 'leaves', 'beverage', 'cup'],
+        'Coffee': ['coffee', 'beans', 'beverage', 'cup'],
+        'Masala': ['spices', 'powder', 'seasoning', 'colorful'],
+        'Spice': ['spices', 'seasoning', 'colorful', 'powder'],
+        'Turmeric': ['turmeric', 'yellow', 'powder', 'spice'],
+        'Chili': ['chili', 'red', 'pepper', 'spice'],
+        'Pepper': ['pepper', 'black', 'spice', 'seasoning'],
+        'Dal': ['lentils', 'pulses', 'legumes', 'protein'],
+        'Lentil': ['lentils', 'pulses', 'legumes', 'protein'],
+        'Milk': ['milk', 'dairy', 'white', 'liquid'],
+        'Butter': ['butter', 'dairy', 'yellow', 'cream'],
+        'Cheese': ['cheese', 'dairy', 'yellow', 'food'],
+        'Bread': ['bread', 'loaf', 'bakery', 'wheat'],
+        'Biscuit': ['biscuits', 'cookies', 'snack', 'bakery'],
+        'Cookie': ['cookies', 'biscuits', 'snack', 'sweet'],
+        'Chocolate': ['chocolate', 'sweet', 'brown', 'candy'],
+        'Juice': ['juice', 'beverage', 'fruit', 'liquid'],
+        'Water': ['water', 'bottle', 'clear', 'liquid'],
+        'Soda': ['soda', 'beverage', 'drink', 'bottle'],
+        'Soap': ['soap', 'bar', 'white', 'cleaning'],
+        'Shampoo': ['shampoo', 'bottle', 'liquid', 'hair'],
+        'Toothpaste': ['toothpaste', 'tube', 'white', 'oral'],
+        'Detergent': ['detergent', 'powder', 'cleaning', 'white'],
+        'Apple': ['apple', 'fruit', 'red', 'fresh'],
+        'Banana': ['banana', 'fruit', 'yellow', 'fresh'],
+        'Mango': ['mango', 'fruit', 'yellow', 'tropical'],
+        'Orange': ['orange', 'fruit', 'citrus', 'fresh'],
+        'Potato': ['potato', 'vegetable', 'brown', 'fresh'],
+        'Tomato': ['tomato', 'vegetable', 'red', 'fresh'],
+        'Onion': ['onion', 'vegetable', 'white', 'fresh'],
+        'Garlic': ['garlic', 'vegetable', 'white', 'bulb'],
+        'Ginger': ['ginger', 'vegetable', 'brown', 'root'],
+        'Egg': ['eggs', 'white', 'protein', 'food'],
+        'Pasta': ['pasta', 'noodles', 'italian', 'food'],
+        'Noodle': ['noodles', 'pasta', 'asian', 'food'],
+        'Honey': ['honey', 'sweet', 'golden', 'natural'],
+        'Yogurt': ['yogurt', 'dairy', 'white', 'creamy'],
+        'Cream': ['cream', 'dairy', 'white', 'rich'],
+        'Ghee': ['ghee', 'clarified butter', 'yellow', 'indian'],
+        'Mustard': ['mustard', 'seeds', 'yellow', 'spice'],
+        'Cumin': ['cumin', 'seeds', 'brown', 'spice'],
+        'Coriander': ['coriander', 'seeds', 'brown', 'spice'],
+        'Cardamom': ['cardamom', 'green', 'spice', 'aromatic'],
+        'Cloves': ['cloves', 'brown', 'spice', 'aromatic'],
+        'Cinnamon': ['cinnamon', 'sticks', 'brown', 'spice'],
+        'Bay': ['bay leaves', 'green', 'leaves', 'spice'],
+        'Fenugreek': ['fenugreek', 'seeds', 'brown', 'spice'],
+        'Sesame': ['sesame', 'seeds', 'white', 'oil'],
+        'Poppy': ['poppy', 'seeds', 'white', 'tiny'],
+        'Saffron': ['saffron', 'threads', 'red', 'expensive'],
+        'Basmati': ['basmati rice', 'rice', 'long grain', 'aromatic'],
+        'Brown': ['brown rice', 'rice', 'whole grain', 'healthy'],
+        'Jasmine': ['jasmine rice', 'rice', 'aromatic', 'thai'],
+        'Parboiled': ['parboiled rice', 'rice', 'processed', 'white'],
+        'Soybean': ['soybean', 'beans', 'protein', 'legumes'],
+        'Sunflower': ['sunflower', 'seeds', 'oil', 'yellow'],
+        'Coconut': ['coconut', 'tropical', 'brown', 'oil'],
+        'Groundnut': ['groundnut', 'peanuts', 'nuts', 'protein'],
+        'Olive': ['olive oil', 'olive', 'green', 'mediterranean'],
+        'Canola': ['canola oil', 'vegetable oil', 'yellow', 'healthy'],
+        'Corn': ['corn oil', 'vegetable oil', 'yellow', 'cooking'],
+        'Peanut': ['peanut', 'nuts', 'brown', 'protein'],
+        'Cashew': ['cashew', 'nuts', 'white', 'creamy'],
+        'Almond': ['almond', 'nuts', 'brown', 'healthy'],
+        'Walnut': ['walnut', 'nuts', 'brown', 'brain'],
+        'Pistachio': ['pistachio', 'nuts', 'green', 'premium'],
+        'Raisin': ['raisins', 'dried fruit', 'brown', 'sweet'],
+        'Date': ['dates', 'dried fruit', 'brown', 'sweet'],
+        'Fig': ['figs', 'dried fruit', 'brown', 'sweet'],
+        'Apricot': ['apricots', 'dried fruit', 'orange', 'sweet'],
+        'Prune': ['prunes', 'dried fruit', 'black', 'sweet'],
+        'Cranberry': ['cranberries', 'dried fruit', 'red', 'tart'],
+        'Blueberry': ['blueberries', 'fruit', 'blue', 'antioxidant'],
+        'Strawberry': ['strawberries', 'fruit', 'red', 'berry'],
+        'Raspberry': ['raspberries', 'fruit', 'red', 'berry'],
+        'Blackberry': ['blackberries', 'fruit', 'black', 'berry'],
+        'Cherry': ['cherries', 'fruit', 'red', 'stone fruit'],
+        'Grape': ['grapes', 'fruit', 'purple', 'bunch'],
+        'Pineapple': ['pineapple', 'fruit', 'yellow', 'tropical'],
+        'Papaya': ['papaya', 'fruit', 'orange', 'tropical'],
+        'Watermelon': ['watermelon', 'fruit', 'green', 'summer'],
+        'Muskmelon': ['muskmelon', 'fruit', 'orange', 'cantaloupe'],
+        'Pomegranate': ['pomegranate', 'fruit', 'red', 'seeds'],
+        'Guava': ['guava', 'fruit', 'green', 'tropical'],
+        'Lychee': ['lychee', 'fruit', 'pink', 'chinese'],
+        'Dragon': ['dragon fruit', 'fruit', 'pink', 'exotic'],
+        'Kiwi': ['kiwi', 'fruit', 'brown', 'fuzzy'],
+        'Plum': ['plum', 'fruit', 'purple', 'stone fruit'],
+        'Peach': ['peach', 'fruit', 'orange', 'stone fruit'],
+        'Pear': ['pear', 'fruit', 'green', 'juicy'],
+        'Grapefruit': ['grapefruit', 'fruit', 'pink', 'citrus'],
+        'Lemon': ['lemon', 'fruit', 'yellow', 'citrus'],
+        'Lime': ['lime', 'fruit', 'green', 'citrus'],
+        'Avocado': ['avocado', 'fruit', 'green', 'creamy'],
+        'Passion': ['passion fruit', 'fruit', 'purple', 'tropical']
+      };
+
+
+      // Find matching category
+      let selectedKeywords = ['product', 'grocery', 'food'];
+      for (const [key, keywords] of Object.entries(productCategories)) {
+        if (productName.includes(key)) {
+          selectedKeywords = keywords;
+          break;
+        }
+      }
+
+      // Use Unsplash API for high-quality, relevant images
+      const searchTerm = selectedKeywords[Math.floor(Math.random() * selectedKeywords.length)];
+      return `https://source.unsplash.com/600x450/?${searchTerm}&grocery,product`;
+    }
+
+    // Fallback: product-themed SVG placeholder
+    function getCardImage(name) {
+      const seed = (name || 'Item').toLowerCase().trim();
+      // Product-themed colors and patterns
+      const productColors = {
+        'rice': ['#f4f4f4', '#e8d5b7', '#d4af37', '#8b4513'],
+        'wheat': ['#f5deb3', '#daa520', '#cd853f', '#8b4513'],
+        'flour': ['#ffffff', '#f5f5f5', '#dcdcdc', '#c0c0c0'],
+        'oil': ['#ffd700', '#ff8c00', '#ffa500', '#ff6347'],
+        'sugar': ['#ffffff', '#fff8dc', '#f0f8ff', '#e6e6fa'],
+        'salt': ['#f5f5f5', '#e0e0e0', '#c0c0c0', '#a9a9a9'],
+        'tea': ['#8fbc8f', '#556b2f', '#8b4513', '#654321'],
+        'coffee': ['#8b4513', '#654321', '#4a4a4a', '#2f2f2f'],
+        'spice': ['#ff4500', '#dc143c', '#8b008b', '#ff8c00'],
+        'turmeric': ['#ffd700', '#ff8c00', '#daa520', '#b8860b'],
+        'chili': ['#ff0000', '#dc143c', '#8b0000', '#b22222'],
+        'pepper': ['#2f2f2f', '#4a4a4a', '#696969', '#808080'],
+        'dal': ['#daa520', '#cd853f', '#a0522d', '#8b4513'],
+        'milk': ['#ffffff', '#f5f5f5', '#fff8dc', '#fffff0'],
+        'butter': ['#ffd700', '#ffff00', '#fff8dc', '#f0e68c'],
+        'cheese': ['#ffd700', '#ffff00', '#fff8dc', '#f0e68c'],
+        'bread': ['#daa520', '#f4a460', '#d2691e', '#cd853f'],
+        'biscuit': ['#daa520', '#f4a460', '#d2691e', '#cd853f'],
+        'chocolate': ['#8b4513', '#654321', '#4a4a4a', '#2f1b14'],
+        'juice': ['#ff6347', '#ff4500', '#ffa500', '#ffb347'],
+        'water': ['#87ceeb', '#b0e0e6', '#add8e6', '#e0ffff'],
+        'soda': ['#ff69b4', '#ff1493', '#dc143c', '#ff0000'],
+        'soap': ['#ffffff', '#f0f8ff', '#e6e6fa', '#dcdcdc'],
+        'shampoo': ['#4169e1', '#6495ed', '#87ceeb', '#b0c4de'],
+        'toothpaste': ['#ffffff', '#f0f8ff', '#e6e6fa', '#f5f5f5'],
+        'detergent': ['#ffffff', '#f5f5f5', '#e0e0e0', '#d3d3d3'],
+        'apple': ['#ff0000', '#dc143c', '#8b0000', '#ff6347'],
+        'banana': ['#ffff00', '#ffd700', '#ffeb3b', '#fff59d'],
+        'mango': ['#ff8c00', '#ffa500', '#ffd700', '#ffff00'],
+        'orange': ['#ffa500', '#ff8c00', '#ff7f00', '#ff6347'],
+        'potato': ['#daa520', '#b8860b', '#cd853f', '#d2691e'],
+        'tomato': ['#ff6347', '#ff4500', '#dc143c', '#b22222'],
+        'onion': ['#dda0dd', '#d8bfd8', '#e6e6fa', '#f5f5f5'],
+        'garlic': ['#ffffff', '#f5f5f5', '#e0e0e0', '#dcdcdc'],
+        'ginger': ['#daa520', '#cd853f', '#d2691e', '#b8860b'],
+        'egg': ['#ffffff', '#f5f5f5', '#fff8dc', '#fffff0'],
+        'pasta': ['#daa520', '#f4a460', '#d2691e', '#cd853f'],
+        'noodle': ['#daa520', '#f4a460', '#d2691e', '#cd853f'],
+        'honey': ['#ffd700', '#ff8c00', '#ffa500', '#daa520'],
+        'yogurt': ['#ffffff', '#f5f5f5', '#fff8dc', '#fffff0'],
+        'cream': ['#ffffff', '#f5f5f5', '#fff8dc', '#fffff0'],
+        'ghee': ['#ffd700', '#ff8c00', '#ffa500', '#daa520'],
+        'mustard': ['#ffd700', '#ffff00', '#ffeb3b', '#fff59d'],
+        'cumin': ['#8b4513', '#a0522d', '#cd853f', '#d2691e'],
+        'coriander': ['#90ee90', '#98fb98', '#8fbc8f', '#9acd32'],
+        'cardamom': ['#90ee90', '#98fb98', '#8fbc8f', '#9acd32'],
+        'cloves': ['#8b4513', '#654321', '#4a4a4a', '#2f2f2f'],
+        'cinnamon': ['#8b4513', '#a0522d', '#cd853f', '#d2691e'],
+        'bay': ['#228b22', '#32cd32', '#90ee90', '#98fb98'],
+        'fenugreek': ['#8fbc8f', '#9acd32', '#adff2f', '#7fff00'],
+        'sesame': ['#ffffff', '#f5f5f5', '#fff8dc', '#fffff0'],
+        'poppy': ['#000080', '#00008b', '#191970', '#0000cd'],
+        'saffron': ['#ff4500', '#ff6347', '#ff7f00', '#ffa500'],
+        'basmati': ['#f4f4f4', '#e8d5b7', '#d4af37', '#8b4513'],
+        'brown': ['#8b4513', '#a0522d', '#cd853f', '#d2691e'],
+        'jasmine': ['#f4f4f4', '#e8d5b7', '#d4af37', '#8b4513'],
+        'parboiled': ['#ffffff', '#f5f5f5', '#f0f0f0', '#e8e8e8'],
+        'soybean': ['#8fbc8f', '#9acd32', '#adff2f', '#7fff00'],
+        'sunflower': ['#ffd700', '#ffff00', '#ffeb3b', '#fff59d'],
+        'coconut': ['#8b4513', '#a0522d', '#cd853f', '#d2691e'],
+        'groundnut': ['#daa520', '#cd853f', '#d2691e', '#b8860b'],
+        'olive': ['#808000', '#6b8e23', '#9acd32', '#adff2f'],
+        'canola': ['#ffd700', '#ffff00', '#ffeb3b', '#fff59d'],
+        'corn': ['#ffd700', '#ffff00', '#ffeb3b', '#fff59d'],
+        'peanut': ['#daa520', '#cd853f', '#d2691e', '#b8860b'],
+        'cashew': ['#ffffff', '#fff8dc', '#fffff0', '#f5f5dc'],
+        'almond': ['#daa520', '#cd853f', '#d2691e', '#b8860b'],
+        'walnut': ['#8b4513', '#654321', '#4a4a4a', '#2f2f2f'],
+        'pistachio': ['#90ee90', '#98fb98', '#8fbc8f', '#9acd32'],
+        'raisin': ['#8b4513', '#a0522d', '#cd853f', '#d2691e'],
+        'date': ['#8b4513', '#a0522d', '#cd853f', '#d2691e'],
+        'fig': ['#8b4513', '#a0522d', '#cd853f', '#d2691e'],
+        'apricot': ['#ffa500', '#ff8c00', '#ff7f00', '#ff6347'],
+        'prune': ['#4b0082', '#6a0dad', '#8b008b', '#9932cc'],
+        'cranberry': ['#dc143c', '#b22222', '#8b0000', '#ff0000'],
+        'blueberry': ['#0000ff', '#00008b', '#191970', '#000080'],
+        'strawberry': ['#ff1493', '#dc143c', '#b22222', '#8b0000'],
+        'raspberry': ['#dc143c', '#b22222', '#8b0000', '#ff0000'],
+        'blackberry': ['#4b0082', '#6a0dad', '#8b008b', '#9932cc'],
+        'cherry': ['#dc143c', '#b22222', '#8b0000', '#ff0000'],
+        'grape': ['#4b0082', '#6a0dad', '#8b008b', '#9932cc'],
+        'pineapple': ['#ffd700', '#ffff00', '#ffeb3b', '#fff59d'],
+        'papaya': ['#ff8c00', '#ffa500', '#ffd700', '#ffff00'],
+        'watermelon': ['#ff1493', '#dc143c', '#b22222', '#8b0000'],
+        'muskmelon': ['#ffa500', '#ff8c00', '#ff7f00', '#ff6347'],
+        'pomegranate': ['#dc143c', '#b22222', '#8b0000', '#ff0000'],
+        'guava': ['#90ee90', '#98fb98', '#8fbc8f', '#9acd32'],
+        'lychee': ['#ff1493', '#dc143c', '#b22222', '#8b0000'],
+        'dragon': ['#ff1493', '#dc143c', '#b22222', '#8b0000'],
+        'kiwi': ['#8fbc8f', '#9acd32', '#adff2f', '#7fff00'],
+        'plum': ['#4b0082', '#6a0dad', '#8b008b', '#9932cc'],
+        'peach': ['#ffa500', '#ff8c00', '#ff7f00', '#ff6347'],
+        'pear': ['#90ee90', '#98fb98', '#8fbc8f', '#9acd32'],
+        'grapefruit': ['#ffa500', '#ff8c00', '#ff7f00', '#ff6347'],
+        'lemon': ['#ffff00', '#ffd700', '#ffeb3b', '#fff59d'],
+        'lime': ['#32cd32', '#90ee90', '#98fb98', '#8fbc8f'],
+        'avocado': ['#8fbc8f', '#9acd32', '#adff2f', '#7fff00']
+      };
+
+      // Find matching product category
+      let colors = ['#ff6b6b', '#4ecdc4', '#45b7d1', '#96ceb4'];
+      for (const [key, colorSet] of Object.entries(productColors)) {
+        if (seed.includes(key)) {
+          colors = colorSet;
+          break;
+        }
+      }
+
+      const c1 = colors[0];
+      const c2 = colors[1];
+      const c3 = colors[2];
+      const c4 = colors[3];
+
+      return `data:image/svg+xml;base64,${btoa(`
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 450">
+          <defs>
+            <linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="${c1}" />
+              <stop offset="100%" stop-color="${c2}" />
+            </linearGradient>
+            <pattern id="p" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse">
+              <circle cx="10" cy="10" r="3" fill="${c3}" opacity="0.3"/>
+            </pattern>
+          </defs>
+          <rect width="600" height="450" fill="url(#g)"/>
+          <rect width="600" height="450" fill="url(#p)" opacity="0.2"/>
+          <circle cx="150" cy="100" r="30" fill="${c4}" opacity="0.4"/>
+          <circle cx="450" cy="350" r="40" fill="${c1}" opacity="0.3"/>
+          <rect x="250" y="180" width="100" height="90" rx="10" fill="${c2}" opacity="0.6"/>
+          <text x="300" y="225" text-anchor="middle" font-size="18" fill="white" font-family="Arial,Helvetica,sans-serif" font-weight="bold">${seed}</text>
+        </svg>`)}`;
+    }
+
+    function appendCard({ name, quantity }) {
+      const grid = document.querySelector('.inventory-grid');
+      const card = document.createElement('div');
+      card.className = 'item-card';
+      // Newly requested items should always show as Out of Stock
+      const statusClass = 'out-stock';
+      const statusText = 'Out of Stock';
+
+      // Try web image first, fallback to SVG if it fails
+      const webImgUrl = getWebImageUrl(name);
+      const fallbackImg = getCardImage(name);
+
+      card.innerHTML = `
+        <img class="card-img" 
+             src="${webImgUrl}" 
+             alt="${name}" 
+             onerror="this.src='${fallbackImg}'; this.onerror=null;"
+             loading="lazy"
+             referrerpolicy="no-referrer">
+        <div class="item-info">
+          <div class="item-name">${name}</div>
+          <div class="stock">Stock: ${quantity}</div>
+          <span class="status ${statusClass}">${statusText}</span>
+        </div>
+      `;
+      const imgEl = card.querySelector('.card-img');
+      imgEl.addEventListener('error', () => {
+        imgEl.src = fallbackImg;
+      });
+      grid.prepend(card);
+    }
+
+    function renderProducts(products) {
+      const tbody = document.querySelector('#products-table tbody');
+      tbody.innerHTML = '';
+      products.forEach(p => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>${p.id}</td>
+          <td>${p.name}</td>
+          <td>${p.quantity}</td>
+          <td class="action-cell">
+            <input type="number" min="1" max="${p.quantity}" value="1" class="row-qty-input" aria-label="Quantity" title="Max ${p.quantity}">
+            <button class="row-add-btn" data-name="${p.name}" data-available="${p.quantity}">Request</button>
+          </td>`;
+        tbody.appendChild(tr);
+      });
+    }
+
+    // Request button functionality: create request in database
+    // Wait for DOM to be fully loaded before adding event listeners
+    document.addEventListener('DOMContentLoaded', function () {
+      const tbody = document.querySelector('#products-table tbody');
+      if (tbody) {
+        tbody.addEventListener('click', async e => {
+          const btn = e.target.closest('.row-add-btn');
+          if (!btn) return;
+
+          const row = btn.closest('tr');
+          const qtyInput = row ? row.querySelector('.row-qty-input') : null;
+
+          const name = btn.getAttribute('data-name') || '';
+          const qtyVal = qtyInput && qtyInput.value ? parseInt(qtyInput.value, 10) : 1;
+          const qty = isNaN(qtyVal) || qtyVal < 1 ? 1 : qtyVal;
+
+          const availableAttr = btn.getAttribute('data-available');
+          const available = parseInt(availableAttr, 10);
+
+          if (!isNaN(available) && qty > available) {
+            if (qtyInput) {
+              qtyInput.classList.add('input-error');
+              qtyInput.focus();
+            }
+            alert(`Quantity exceeds available stock (max: ${available})`);
+            return;
+          }
+
+          if (qtyInput) qtyInput.classList.remove('input-error');
+
+          // Get shopkeeper info
+          const shopkeeperName = document.getElementById('shopkeeperName').value;
+          const shopkeeperEmail = document.getElementById('shopkeeperEmail').value;
+
+          if (!shopkeeperName || !shopkeeperEmail) {
+            alert('Shopkeeper information not found. Please log in again.');
+            return;
+          }
+
+          // Create request object with required fields
+          const request = {
+            shopkeeperName: shopkeeperName,
+            shopkeeperEmail: shopkeeperEmail,
+            productName: name,
+            quantity: qty,
+            category: 'General', // Default category since it's required
+            expectedPrice: 0.0,  // Default price since it's required
+            description: `Request for ${name} (Qty: ${qty})`
+          };
+
+          try {
+            // Create request via API
+            const response = await fetch('http://localhost:8080/api/requests/shopkeeper/create', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + localStorage.getItem('jwtToken')
+              },
+              body: JSON.stringify(request)
+            });
+
+            if (response.ok) {
+              const createdRequest = await response.json();
+              alert(`Request created successfully! Request ID: ${createdRequest.id}`);
+
+              // Add visual card for immediate feedback
+              appendCard({ name, quantity: qty });
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+
+              // Clear inputs
+              if (qtyInput) qtyInput.value = '1';
+            } else {
+              const error = await response.text();
+              alert(`Failed to create request: ${error}`);
+            }
+          } catch (error) {
+            console.error('Error creating request:', error);
+            alert('Error creating request. Please try again.');
+          }
+        });
+      }
+    });
+
+    // Move search input event listener inside DOMContentLoaded
+    const searchInput = document.querySelector('.search-box');
+    if (searchInput) {
+      searchInput.addEventListener('input', async e => {
+        const q = e.target.value.trim().toLowerCase();
+        if (!q) {
+          table.style.display = 'none';
+          return;
+        }
+        const products = await fetchProducts();
+        const filtered = products.filter(p => (p.name || '').toLowerCase().includes(q));
+        if (filtered.length > 0) {
+          renderProducts(filtered);
+          table.style.display = '';
+        } else {
+          table.style.display = 'none';
+          const form = document.getElementById('addForm');
+          form.name.value = e.target.value.trim();
+        }
+      });
+    }
+
+    const addForm = document.getElementById('addForm');
+    if (addForm) {
+      addForm.addEventListener('submit', async e => {
+        e.preventDefault();
+        const form = e.target;
+        const nameQuery = form.name.value.trim();
+        const searchEl = document.getElementById('searchBox');
+        searchEl.value = nameQuery;
+        const products = await fetchProducts();
+        let filtered = products;
+        if (nameQuery) {
+          const q = nameQuery.toLowerCase();
+          filtered = filtered.filter(p => (p.name || '').toLowerCase().includes(q));
+        }
+        if (filtered.length) {
+          renderProducts(filtered);
+          table.style.display = '';
+        } else {
+          table.style.display = 'none';
+        }
+      });
+    }
+
+  </script>
+
+  <script>
+    // Load shop ID from localStorage (set in login page)
+    const shopId = localStorage.getItem("shopId");
+    const shopIdEl = document.getElementById("shopIdDisplay");
+    if (shopId && shopIdEl) {
+      shopIdEl.innerText = "Shop ID: " + shopId;
+    }
+
+    // Load shopkeeper info from localStorage or set defaults
+    function loadShopkeeperInfo() {
+      const shopkeeperName = localStorage.getItem("shopkeeperName") || "Test Shopkeeper";
+      const shopkeeperEmail = localStorage.getItem("shopkeeperEmail") || "shopkeeper@example.com";
+
+      document.getElementById('shopkeeperName').value = shopkeeperName;
+      document.getElementById('shopkeeperEmail').value = shopkeeperEmail;
+    }
+
+    // Load shopkeeper info when page loads
+    loadShopkeeperInfo();
+
+    // Product Catalog functionality
+    const openCatalogBtn = document.getElementById('openCatalogBtn');
+    if (openCatalogBtn) {
+      openCatalogBtn.addEventListener('click', function () {
+        window.open('product-catalog.html', '_blank');
+      });
+    }
+
+    // Check if a product was selected from catalog
+    function checkSelectedProduct() {
+      const selectedProductId = localStorage.getItem('selectedProductId');
+      const selectedProductName = localStorage.getItem('selectedProductName');
+
+      if (selectedProductId && selectedProductName) {
+        // Auto-fill the search box with selected product
+        const searchBox = document.getElementById('searchBox');
+        if (searchBox) {
+          searchBox.value = selectedProductName;
+          // Trigger search
+          const event = new Event('input');
+          searchBox.dispatchEvent(event);
+        }
+
+        // Clear the selection after use
+        localStorage.removeItem('selectedProductId');
+        localStorage.removeItem('selectedProductName');
+
+        // Show notification
+        showNotification(`✅ Product "${selectedProductName}" loaded from catalog!`);
+      }
+    }
+
+    // Notification system
+    function showNotification(message, duration = 3000) {
+      const notification = document.createElement('div');
+      notification.style.cssText = `
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #28a745;
+            color: white;
+            padding: 15px 20px;
+            border-radius: 5px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            z-index: 1000;
+            font-weight: bold;
+            animation: slideIn 0.3s ease;
+        `;
+      notification.textContent = message;
+
+      // Add animation
+      const style = document.createElement('style');
+      style.textContent = `
+            @keyframes slideIn {
+                from { transform: translateX(100%); opacity: 0; }
+                to { transform: translateX(0); opacity: 1; }
+            }
+        `;
+      document.head.appendChild(style);
+
+      document.body.appendChild(notification);
+
+      setTimeout(() => {
+        notification.style.animation = 'slideIn 0.3s ease reverse';
+        setTimeout(() => notification.remove(), 300);
+      }, duration);
+    }
+
+    // Check for selected product when page loads
+    document.addEventListener('DOMContentLoaded', function () {
+      // Small delay to ensure everything is loaded
+      setTimeout(checkSelectedProduct, 500);
+    });
+
+    function logout() {
+      localStorage.removeItem("shopId");
+      localStorage.removeItem("shopkeeperName");
+      localStorage.removeItem("shopkeeperEmail");
+      localStorage.removeItem("jwtToken");
+      localStorage.removeItem("user");
+      window.location.href = "/login.html";
+    }
+  </script>
+
+</body>
+
+</html>

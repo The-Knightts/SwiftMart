@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vendor Requests - SwiftMart</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f8f9fa;
+      margin: 0;
+      padding: 0;
+      color: #333;
+    }
+
+    /* Header */
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 30px;
+      background: #fff;
+      border-bottom: 1px solid #ddd;
+    }
+
+    header h1 {
+      font-size: 22px;
+      margin: 0;
+      color: #2e7d32;
+    }
+    header h1 span {
+      color: #1565c0;
+    }
+
+    .logout-btn {
+      background: #fff;
+      border: 1px solid #ddd;
+      padding: 8px 14px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: bold;
+    }
+
+    /* Tabs */
+    .tabs {
+      display: flex;
+      justify-content: center;
+      margin: 20px 30px 0 30px;
+      background: #eaeaea;
+      border-radius: 30px;
+      overflow: hidden;
+    }
+
+    .tab {
+      flex: 1;
+      padding: 12px 0;
+      text-align: center;
+      cursor: pointer;
+      font-weight: bold;
+      transition: background 0.2s;
+    }
+
+    .tab.active {
+      background: #fff;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+
+    /* Requests Container */
+    .container {
+      width: calc(100% - 60px); /* full width with side margin */
+      margin: 20px auto;
+      background: #fff;
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+
+    .container h2 {
+      margin-top: 0;
+    }
+
+    .request {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 10px;
+      border-bottom: 1px solid #e0e0e0;
+    }
+    .request:last-child {
+      border-bottom: none;
+    }
+
+    .req-info h3 {
+      margin: 0;
+      font-size: 16px;
+    }
+
+    .emergency {
+      background: #d32f2f;
+      color: white;
+      font-size: 12px;
+      padding: 2px 8px;
+      border-radius: 12px;
+      margin-left: 8px;
+    }
+
+    .req-meta {
+      font-size: 13px;
+      color: gray;
+      margin-top: 5px;
+    }
+
+    .req-actions {
+      text-align: right;
+      min-width: 200px;
+    }
+
+    .units {
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+
+    .status {
+      font-size: 12px;
+      padding: 2px 6px;
+      border-radius: 10px;
+      margin-right: 5px;
+    }
+    .pending { background: #e3e6ec; color: #333; }
+    .fulfilled { background: #000; color: #fff; }
+    .out-of-stock { background: #f8d7da; color: #721c24; }
+    /* Increase padding for status badges */
+    .status.pending { padding: 6px 12px; }
+    .status.fulfilled { padding: 6px 12px; }
+    .status.out-of-stock { padding: 6px 12px; }
+
+    .btn {
+      padding: 6px 14px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      margin-left: 5px;
+    }
+    .btn-fulfill { background: #2e7d32; color: #fff; }
+    .btn-cancel { background: #f5f5f5; color: #333; }
+    .btn:disabled { opacity: 0.6; cursor: default; }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1><span>SwiftMart</span> Vendor</h1>
+    <button class="logout-btn" onclick="logout()">Logout</button>
+  </header>
+
+  <!-- Navigation Tabs -->
+  <div class="tabs">
+    <div class="tab" onclick="window.location.href='/vendor/dashboard'">Dashboard</div>
+    <div class="tab active">All Requests</div>
+    <div class="tab" onclick="window.location.href='/vendor/emergency'">Emergency</div>
+    <div class="tab" onclick="window.location.href='/vendor/shop'">Shops</div>
+  </div>
+
+  <!-- Requests Section -->
+  <div class="container">
+    <h2>All Requests</h2>
+
+    <!-- Request Item -->
+    <div class="request" data-id="req-potato-chips-SHOP001-2025-09-15-0900">
+      <div class="req-info">
+        <h3>Potato Chips <span class="emergency">Emergency</span></h3>
+        <div class="req-meta">Raj Kumar (SHOP001) | 9/15/2025, 9:00 AM</div>
+      </div>
+      <div class="req-actions">
+        <div class="units">50 units</div>
+        <span class="status pending">Pending</span>
+        <button class="btn btn-fulfill">Fulfill</button>
+        <button class="btn btn-cancel">Cancel</button>
+      </div>
+    </div>
+
+    <div class="request" data-id="req-whole-milk-SHOP002-2025-09-15-1030">
+      <div class="req-info">
+        <h3>Whole Milk</h3>
+        <div class="req-meta">Priya Sharma (SHOP002) | 9/15/2025, 10:30 AM</div>
+      </div>
+      <div class="req-actions">
+        <div class="units">20 units</div>
+        <span class="status pending">Pending</span>
+        <button class="btn btn-fulfill">Fulfill</button>
+        <button class="btn btn-cancel">Cancel</button>
+      </div>
+    </div>
+
+    <div class="request" data-id="req-fresh-bananas-SHOP001-2025-09-14-1415">
+      <div class="req-info">
+        <h3>Fresh Bananas</h3>
+        <div class="req-meta">Raj Kumar (SHOP001) | 9/14/2025, 2:15 PM</div>
+      </div>
+      <div class="req-actions">
+        <div class="units">30 units</div>
+        <span class="status fulfilled">fulfilled</span>
+      </div>
+    </div>
+
+    <div class="request" data-id="req-white-bread-SHOP003-2025-09-15-1145">
+      <div class="req-info">
+        <h3>White Bread <span class="emergency">Emergency</span></h3>
+        <div class="req-meta">Amit Patel (SHOP003) | 9/15/2025, 11:45 AM</div>
+      </div>
+      <div class="req-actions">
+        <div class="units">25 units</div>
+        <span class="status pending">Pending</span>
+        <button class="btn btn-fulfill">Fulfill</button>
+        <button class="btn btn-cancel">Cancel</button>
+      </div>
+    </div>
+
+    <div class="request" data-id="req-organic-apples-SHOP004-2025-09-15-1230">
+      <div class="req-info">
+        <h3>Organic Apples</h3>
+        <div class="req-meta">Sarah Johnson (SHOP004) | 9/15/2025, 12:30 PM</div>
+      </div>
+      <div class="req-actions">
+        <div class="units">15 units</div>
+        <span class="status out-of-stock">Out of Stock</span>
+        <button class="btn btn-fulfill">Fulfill</button>
+        <button class="btn btn-cancel">Cancel</button>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    // Check authentication
+    if (!localStorage.getItem('jwtToken')) {
+        window.location.href = '/login.html';
+    }
+
+    // Load requests from backend API
+    async function loadRequests() {
+      try {
+        const response = await fetch('http://localhost:8080/api/requests/vendor/pending', {
+          headers: {
+            'Authorization': 'Bearer ' + localStorage.getItem('jwtToken')
+          }
+        });
+
+        if (response.ok) {
+          const requests = await response.json();
+          displayRequests(requests);
+        } else {
+          console.error('Failed to load requests:', response.status);
+        }
+      } catch (error) {
+        console.error('Error loading requests:', error);
+      }
+    }
+
+    // Display requests in the UI
+    function displayRequests(requests) {
+      const container = document.querySelector('.container');
+      const existingRequests = container.querySelectorAll('.request');
+      existingRequests.forEach(req => req.remove());
+
+      requests.forEach(request => {
+        const requestElement = createRequestElement(request);
+        container.appendChild(requestElement);
+      });
+    }
+
+    // Create request element
+    function createRequestElement(request) {
+      const div = document.createElement('div');
+      div.className = 'request';
+      div.setAttribute('data-id', request.id);
+      
+      const isEmergency = request.emergency ? '<span class="emergency">Emergency</span>' : '';
+      const statusClass = request.status.toLowerCase().replace('_', '-');
+      
+      div.innerHTML = `
+        <div class="req-info">
+          <h3>${request.productName} ${isEmergency}</h3>
+          <div class="req-meta">${request.shopkeeperName} (${request.shopId}) | ${new Date(request.createdAt).toLocaleString()}</div>
+        </div>
+        <div class="req-actions">
+          <div class="units">${request.quantity} units</div>
+          <span class="status ${statusClass}">${request.status.replace('_', ' ')}</span>
+          <button class="btn btn-fulfill" onclick="fulfillRequest('${request.id}')">Fulfill</button>
+          <button class="btn btn-cancel" onclick="cancelRequest('${request.id}')">Cancel</button>
+        </div>
+      `;
+      
+      return div;
+    }
+
+    // Mark a request as fulfilled when clicking Fulfill
+    document.addEventListener('DOMContentLoaded', function () {
+      // Load requests on page load
+      loadRequests();
+      const KEY_PREFIX = 'vendorReqFulfilled-';
+      const KEY_CANCEL = 'vendorReqCancelled-';
+
+      // Apply persisted state on load
+      document.querySelectorAll('.request').forEach(function (req) {
+        const id = req.getAttribute('data-id');
+        if (!id) return;
+        const statusEl = req.querySelector('.status');
+        const fulfillBtn = req.querySelector('.btn-fulfill');
+        const cancelBtn = req.querySelector('.btn-cancel');
+        // If cancelled, remove from list entirely
+        const cancelled = localStorage.getItem(KEY_CANCEL + id);
+        if (cancelled === '1') {
+          req.remove();
+          return;
+        }
+        const fulfilled = localStorage.getItem(KEY_PREFIX + id);
+        if (fulfilled === '1' && statusEl) {
+          statusEl.classList.remove('pending');
+          statusEl.classList.add('fulfilled');
+          statusEl.textContent = 'fulfilled';
+          if (fulfillBtn) fulfillBtn.style.display = 'none';
+          if (cancelBtn) cancelBtn.style.display = 'none';
+        }
+      });
+
+      // Wire fulfill clicks to persist
+      document.querySelectorAll('.btn-fulfill').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          const request = btn.closest('.request');
+          if (!request) return;
+          const id = request.getAttribute('data-id');
+          const statusEl = request.querySelector('.status');
+          const cancelBtn = request.querySelector('.btn-cancel');
+          if (!statusEl) return;
+          // Update badge to fulfilled
+          statusEl.classList.remove('pending');
+          statusEl.classList.add('fulfilled');
+          statusEl.textContent = 'fulfilled';
+          // Disable fulfill to prevent repeat clicks
+          btn.disabled = true;
+          // Hide fulfill and cancel buttons
+          btn.style.display = 'none';
+          if (cancelBtn) cancelBtn.style.display = 'none';
+          // Persist completion
+          if (id) localStorage.setItem(KEY_PREFIX + id, '1');
+        });
+      });
+
+      // Wire cancel clicks to remove and persist cancellation
+      document.querySelectorAll('.btn-cancel').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          const request = btn.closest('.request');
+          if (!request) return;
+          const id = request.getAttribute('data-id');
+          // Persist cancellation and remove from DOM
+          if (id) localStorage.setItem(KEY_CANCEL + id, '1');
+          request.remove();
+        });
+      });
+    });
+
+    // Fulfill request function
+    async function fulfillRequest(requestId) {
+      try {
+        const response = await fetch(`http://localhost:8080/api/requests/vendor/${requestId}/complete`, {
+          method: 'POST',
+          headers: {
+            'Authorization': 'Bearer ' + localStorage.getItem('jwtToken')
+          }
+        });
+
+        if (response.ok) {
+          // Remove the request from the UI
+          const requestElement = document.querySelector(`[data-id="${requestId}"]`);
+          if (requestElement) {
+            requestElement.remove();
+          }
+          alert('Request fulfilled successfully!');
+        } else {
+          alert('Failed to fulfill request. Please try again.');
+        }
+      } catch (error) {
+        console.error('Error fulfilling request:', error);
+        alert('Error fulfilling request. Please try again.');
+      }
+    }
+
+    // Cancel request function
+    async function cancelRequest(requestId) {
+      try {
+        const response = await fetch(`http://localhost:8080/api/requests/vendor/${requestId}/reject`, {
+          method: 'POST',
+          headers: {
+            'Authorization': 'Bearer ' + localStorage.getItem('jwtToken')
+          }
+        });
+
+        if (response.ok) {
+          // Remove the request from the UI
+          const requestElement = document.querySelector(`[data-id="${requestId}"]`);
+          if (requestElement) {
+            requestElement.remove();
+          }
+          alert('Request cancelled successfully!');
+        } else {
+          alert('Failed to cancel request. Please try again.');
+        }
+      } catch (error) {
+        console.error('Error cancelling request:', error);
+        alert('Error cancelling request. Please try again.');
+      }
+    }
+
+    // Logout function
+    function logout() {
+      localStorage.removeItem("jwtToken");
+      localStorage.removeItem("user");
+      window.location.href = "/login.html";
+    }
+  </script>
+
+</body>
+</html>

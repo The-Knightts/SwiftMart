@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shopkeeper Dashboard</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f8f9fb;
+      margin: 0;
+      padding: 0;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 30px;
+      background: white;
+      border-bottom: 1px solid #ddd;
+    }
+
+    .logo {
+      font-size: 1.6rem;
+      font-weight: bold;
+    }
+
+    .logo span {
+      color: #1e9b5a;
+    }
+
+    .logout-btn {
+      background: white;
+      border: 1px solid #ddd;
+      padding: 8px 14px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    .nav-tabs {
+      display: flex;
+      justify-content: center;
+      background: #f8f9fb;
+      padding: 12px 0;
+      gap: 10px;
+    }
+
+    .nav-tab {
+      padding: 10px 20px;
+      background: #ececec;
+      border-radius: 20px;
+      cursor: pointer;
+      transition: background 0.2s ease-in-out;
+    }
+
+    .nav-tab:hover {
+      background: #ddd;
+    }
+
+    .nav-tab.active {
+      background: white;
+      border: 1px solid #ccc;
+      font-weight: bold;
+    }
+
+    .dashboard-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+      padding: 20px;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .card {
+      background: white;
+      border-radius: 10px;
+      padding: 20px;
+      text-align: center;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+
+    .card h3 {
+      margin: 0;
+      font-size: 1.2rem;
+    }
+
+    .card p {
+      margin: 5px 0 0;
+      color: gray;
+    }
+
+    .recent-sales {
+      background: white;
+      border-radius: 10px;
+      padding: 20px;
+      margin: 20px auto;
+      max-width: 1100px;
+      text-align: center;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header>
+    <div class="logo"><span>Swift</span>Mart</div>
+    <button class="logout-btn" onclick="window.location.href='http://localhost:8080/'">Logout</button>
+  </header>
+
+  <!-- Navigation Tabs -->
+  <div class="nav-tabs">
+    <div class="nav-tab active" onclick="window.location.href='shopkeeper-dashboard.html'">Dashboard</div>
+    <div class="nav-tab" onclick="window.location.href='shopkeeper-inventory.html'">Inventory</div>
+    <div class="nav-tab" onclick="window.location.href='shopkeeper-sales-history.html'">Sales History</div>
+    <div class="nav-tab" onclick="window.location.href='shopkeeper-vendor-request.html'">Vendor Requests</div>
+  </div>
+
+  <!-- Dashboard Content -->
+  <div class="dashboard-container">
+    <div class="card">
+      <h3>Today's Revenue</h3>
+      <p>₹0<br>0 items sold</p>
+    </div>
+    <div class="card">
+      <h3>Total Items</h3>
+      <p>6<br>In inventory</p>
+    </div>
+    <div class="card">
+      <h3>Low Stock</h3>
+      <p>2<br>Items need restocking</p>
+    </div>
+    <div class="card">
+      <h3>Out of Stock</h3>
+      <p>1<br>Items unavailable</p>
+    </div>
+  </div>
+
+  <!-- Recent Sales -->
+  <div class="recent-sales">
+    <h3>Recent Sales</h3>
+    <p>No sales today</p>
+  </div>
+
+</body>
+</html>

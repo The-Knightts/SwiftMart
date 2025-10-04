@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vendor Shops - SwiftMart</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      background-color: #f8f9fb;
+      color: #333;
+    }
+
+    /* Header */
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 30px;
+      background: #fff;
+      border-bottom: 1px solid #ddd;
+    }
+
+    .logo {
+      font-size: 1.6rem;
+      font-weight: bold;
+      color: #1e9b5a;
+    }
+
+    .logout-btn {
+      background: #fff;
+      border: 1px solid #ddd;
+      padding: 8px 14px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    /* Tabs */
+    .tabs {
+      display: flex;
+      justify-content: start;
+      margin: 20px 30px 0 30px;
+      background: #eaeaea;
+      border-radius: 20px;
+      overflow: hidden;
+    }
+
+    .tab {
+      flex: 1;
+      padding: 10px 0;
+      text-align: center;
+      cursor: pointer;
+      font-weight: bold;
+      transition: background 0.2s;
+    }
+
+    .tab.active {
+      background: #fff;
+    }
+
+    /* Shops Section */
+    .shops {
+      margin: 20px 30px;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .shop-card {
+      background: #fff;
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+
+    .shop-header {
+      font-weight: bold;
+      font-size: 1.1rem;
+      margin-bottom: 5px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .shop-id {
+      font-size: 0.9rem;
+      color: gray;
+      margin-bottom: 15px;
+    }
+
+    .shop-stats {
+      font-size: 0.9rem;
+      margin-bottom: 12px;
+    }
+
+    .shop-stats span {
+      display: block;
+      margin: 3px 0;
+    }
+
+    .recent-requests {
+      margin-top: 10px;
+    }
+
+    .recent-requests h4 {
+      font-size: 0.95rem;
+      margin-bottom: 8px;
+    }
+
+    .request-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #f8f9fb;
+      padding: 8px 12px;
+      border-radius: 8px;
+      margin-bottom: 8px;
+    }
+
+    .status {
+      font-size: 12px;
+      padding: 3px 8px;
+      border-radius: 6px;
+      text-transform: lowercase;
+    }
+
+    .status.pending {
+      background: #eee;
+      color: #555;
+    }
+
+    .status.fulfilled {
+      background: #000;
+      color: #fff;
+    }
+    /* Match badge padding with vendor-requests */
+    .status.pending { padding: 6px 12px; }
+    .status.fulfilled { padding: 6px 12px; }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header>
+    <div class="logo">SwiftMart Vendor</div>
+    <button class="logout-btn" onclick="logout()">Logout</button>
+  </header>
+
+  <!-- Tabs -->
+  <div class="tabs">
+    <div class="tab" onclick="window.location.href='/vendor/dashboard'">Dashboard</div>
+    <div class="tab" onclick="window.location.href='/vendor/requests'">All Requests</div>
+    <div class="tab" onclick="window.location.href='/vendor/emergency'">Emergency</div>
+    <div class="tab active">Shops</div>
+  </div>
+
+  <!-- Shops Grid -->
+  <div class="shops">
+    
+    <div class="shop-card">
+      <div class="shop-header">🏬 Raj Kumar</div>
+      <div class="shop-id">Shop ID: SHOP001</div>
+      <div class="shop-stats">
+        <span>Total Requests: 2</span>
+        <span>Pending: 1</span>
+        <span style="color:#d33;">Emergency: 1</span>
+      </div>
+      <div class="recent-requests">
+        <h4>Recent Requests:</h4>
+        <div class="request-item" data-id="req-potato-chips-SHOP001-2025-09-15-0900">
+          <span>Potato Chips</span>
+          <span class="status pending">pending</span>
+        </div>
+        <div class="request-item" data-id="req-fresh-bananas-SHOP001-2025-09-14-1415">
+          <span>Fresh Bananas</span>
+          <span class="status fulfilled">fulfilled</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="shop-card">
+      <div class="shop-header">🏬 Priya Sharma</div>
+      <div class="shop-id">Shop ID: SHOP002</div>
+      <div class="shop-stats">
+        <span>Total Requests: 2</span>
+        <span>Pending: 1</span>
+        <span>Emergency: 0</span>
+      </div>
+      <div class="recent-requests">
+        <h4>Recent Requests:</h4>
+        <div class="request-item" data-id="req-whole-milk-SHOP002-2025-09-15-1030">
+          <span>Whole Milk</span>
+          <span class="status pending">pending</span>
+        </div>
+        <div class="request-item">
+          <span>Tomatoes</span>
+          <span class="status fulfilled">fulfilled</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="shop-card">
+      <div class="shop-header">🏬 Amit Patel</div>
+      <div class="shop-id">Shop ID: SHOP003</div>
+      <div class="shop-stats">
+        <span>Total Requests: 1</span>
+        <span>Pending: 1</span>
+        <span style="color:#d33;">Emergency: 1</span>
+      </div>
+      <div class="recent-requests">
+        <h4>Recent Requests:</h4>
+        <div class="request-item" data-id="req-white-bread-SHOP003-2025-09-15-1145">
+          <span>White Bread</span>
+          <span class="status pending">pending</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    function switchTab(el) {
+      document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+      el.classList.add('active');
+    }
+
+    function logout() {
+      const confirmLogout = confirm("Are you sure you want to log out?");
+      if (confirmLogout) {
+        window.location.href = "http://localhost:8080/";
+      }
+    }
+
+    // Reflect persisted fulfill/cancel state from vendor-requests
+    document.addEventListener('DOMContentLoaded', function () {
+      const KEY_PREFIX = 'vendorReqFulfilled-';
+      const KEY_CANCEL = 'vendorReqCancelled-';
+
+      document.querySelectorAll('.request-item[data-id]').forEach(function (item) {
+        const id = item.getAttribute('data-id');
+        if (!id) return;
+        const statusEl = item.querySelector('.status');
+
+        // Remove cancelled requests entirely from recent list
+        const cancelled = localStorage.getItem(KEY_CANCEL + id);
+        if (cancelled === '1') {
+          item.remove();
+          return;
+        }
+
+        // Apply fulfilled state styling/text
+        const fulfilled = localStorage.getItem(KEY_PREFIX + id);
+        if (fulfilled === '1' && statusEl) {
+          statusEl.classList.remove('pending');
+          statusEl.classList.add('fulfilled');
+          statusEl.textContent = 'fulfilled';
+        }
+      });
+    });
+  </script>
+
+</body>
+</html>
